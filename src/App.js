@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { Button, Box, Paper, List, ListItem, ListItemIcon, Checkbox, ListItemText, ListItemSecondaryAction, IconButton, makeStyles, Fab, TextField } from '@material-ui/core';
-import todo from './todo.json'
 import './style/style.scss';
 import './style/bg.scss';
-import { styled } from '@material-ui/styles';
 import { Add, Delete } from '@material-ui/icons';
 import axios from 'axios';
+
+const REACT_APP_API = process.env.REACT_APP_API;
 
 function App() {
   const [data, setData] = useState();
@@ -24,7 +24,7 @@ function App() {
     setData(dataCopy);
 
     // Create a PUT request to change data
-    axios.put('http://localhost:3001/api/todo', {
+    axios.put(REACT_APP_API, {
       data: {
         id: id,
         done: dataCopy.filter(todo => todo["_id"] === id)[0]["done"],
@@ -46,7 +46,7 @@ function App() {
     setData(dataCopy);
 
     // Create a DELETE request to the API
-    axios.delete('http://localhost:3001/api/todo', {
+    axios.delete(REACT_APP_API, {
       data: {
         id: id
       }
@@ -69,7 +69,7 @@ function App() {
     setData(dataCopy);
 
     // Create a POST request to the API 
-    axios.post('http://localhost:3001/api/todo', {
+    axios.post(REACT_APP_API, {
       "title": dataCopy[0].title,
       "due": dataCopy[0].due,
       "done": dataCopy[0].done
@@ -88,7 +88,7 @@ function App() {
   
   const fetchData = async () => {
     try {
-      const res = await axios.get('http://localhost:3001/api/todo');
+      const res = await axios.get(REACT_APP_API);
       console.log('Success!');
       setData(res.data);
     } catch (e) {
