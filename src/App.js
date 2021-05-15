@@ -12,11 +12,32 @@ function App() {
   const [newValue, setNewValue] = useState();
   const [selectedDate, setSelectedDate] = useState(new Date('2014-08-18T21:11:54'));
 
-  const handleCheck = (index) => {
+  const handleCheck = (id) => {
     let dataCopy = [...data];
-    dataCopy[index].done = !dataCopy[index].done;
+    let checkedElementCopy = dataCopy.filter(todo => todo["_id"] === id);
+    console.log(dataCopy.filter(todo => todo["_id"] === id)[0].done);
+    dataCopy.map((element) => {
+      if (element["_id"] == id) {
+        element.done = !element.done;
+      }
+    });
     setData(dataCopy);
+
+    // Create a PUT request to change data
+    axios.put('http://localhost:3001/api/todo', {
+      data: {
+        id: id,
+        done: dataCopy.filter(todo => todo["_id"] === id)[0]["done"],
+      }
+    })
+      .then((result) => {
+        console.log(result)
+      })
+      .catch((error) => {
+        console.log(error)
+      });
   }
+
   const handleDelete = (id) => {
     console.log(id)
     let dataCopy = [...data];
